@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
-import "./globals.css";
 import { cn } from "@/lib/utils";
+import "./globals.css";
 
 const figtree = Figtree({
     subsets: ["latin"],
@@ -26,7 +26,7 @@ export default function RootLayout({
                     "font-figtree antialiased bg-background text-foreground"
                 )}
             >
-                <div className="min-h-screen">{children}</div>
+                <div className="min-h-screen px-4 py-8">{children}</div>
             </body>
         </html>
     );
