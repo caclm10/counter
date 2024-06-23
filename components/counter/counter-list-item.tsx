@@ -2,11 +2,23 @@
 
 import { useRouter } from "next/navigation";
 import type { Counter } from "@/models/counter";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import dayjs from "dayjs";
 
 interface Props extends Counter {}
 
-export default function CounterListItem({ id, title, count }: Props) {
+export default function CounterListItem({
+    id,
+    title,
+    count,
+    createdAt,
+}: Props) {
     const router = useRouter();
 
     function handleClick() {
@@ -20,9 +32,12 @@ export default function CounterListItem({ id, title, count }: Props) {
             onClick={handleClick}
         >
             <CardHeader>
-                <CardTitle className="text-lg font-medium select-none">
+                <CardTitle className="font-medium select-none">
                     {title}
                 </CardTitle>
+                <CardDescription>
+                    {dayjs(createdAt).format("DD MMMM YYYY, HH:mm")}
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-center text-center">
