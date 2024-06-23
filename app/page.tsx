@@ -1,8 +1,7 @@
-import { nanoid } from "nanoid";
-import { PlusIcon } from "lucide-react";
-import CounterList from "@/components/counter/counter-list";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import MainCounterList from "@/app/list";
 
 export default function Home() {
     return (
@@ -15,22 +14,7 @@ export default function Home() {
                 </Button>
             </div>
 
-            <CounterList
-                items={[
-                    {
-                        id: nanoid(),
-                        title: "Current Conan Chapter",
-                        count: 13,
-                        createdAt: "2024-06-22T20:38:52+07:00",
-                    },
-                    {
-                        id: nanoid(),
-                        title: "Current Mushishi Episode",
-                        count: 26,
-                        createdAt: "2024-06-21T20:50:07+07:00",
-                    },
-                ]}
-            />
+            <MainCounterList />
         </>
     );
 }

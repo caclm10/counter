@@ -1,5 +1,11 @@
 "use client";
 
+import dayjs from "dayjs";
+import { nanoid } from "nanoid";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useStore } from "@nanostores/react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -10,9 +16,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { $counter } from "@/stores/counter-store";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     title: z.string().min(1, {
@@ -21,6 +26,10 @@ const formSchema = z.object({
 });
 
 export default function CreateCounterForm() {
+    const router = useRouter();
+
+    const { items } = useStore($counter);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -29,7 +38,17 @@ export default function CreateCounterForm() {
     });
 
     function onSubmit({ title }: z.infer<typeof formSchema>) {
-        alert(title);
+        $counter.setKey("items", [
+            {
+                id: nanoid(),
+                title,
+                count: 0,
+                createdAt: dayjs().format(),
+            },
+            ...items,
+        ]);
+
+        router.push("/");
     }
 
     return (
