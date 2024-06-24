@@ -16,7 +16,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { $counter } from "@/stores/counter-store";
+import { $counters } from "@/stores/counter-store";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -28,7 +28,7 @@ const formSchema = z.object({
 export default function CreateCounterForm() {
     const router = useRouter();
 
-    const { items } = useStore($counter);
+    const items = useStore($counters);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,7 +38,7 @@ export default function CreateCounterForm() {
     });
 
     function onSubmit({ title }: z.infer<typeof formSchema>) {
-        $counter.setKey("items", [
+        $counters.set([
             {
                 id: nanoid(),
                 title,
