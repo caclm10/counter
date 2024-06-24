@@ -1,20 +1,11 @@
-import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
 import CreateCounterForm from "@/app/create/form";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import BackButton from "@/components/back-button";
 
 export default function Create() {
     return (
         <>
-            <div className="mb-6">
-                <Button variant="ghost" asChild>
-                    <Link href="/">
-                        <ArrowLeftIcon className="mr-2 size-4" />
-                        Back
-                    </Link>
-                </Button>
-            </div>
+            <BackButton />
 
             <Card>
                 <CardContent className="pt-6">
