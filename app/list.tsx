@@ -1,11 +1,11 @@
 "use client";
 
+import { useLiveQuery } from "dexie-react-hooks";
 import CounterList from "@/components/counter/counter-list";
-import { $counters } from "@/stores/counter-store";
-import { useStore } from "@nanostores/react";
+import { db } from "@/lib/db";
 
 export default function MainCounterList() {
-    const items = useStore($counters);
+    const items = useLiveQuery(() => db.counters.toArray());
 
     return <CounterList items={items} />;
 }

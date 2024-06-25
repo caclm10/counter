@@ -16,8 +16,10 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { $counters } from "@/stores/counter-store";
 import { useRouter } from "next/navigation";
+import { db } from "@/lib/db";
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
     title: z.string().min(1, {
@@ -26,9 +28,9 @@ const formSchema = z.object({
 });
 
 export default function CreateCounterForm() {
-    const router = useRouter();
+    const [processing, setProcessing] = useState(false);
 
-    const items = useStore($counters);
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -37,18 +39,22 @@ export default function CreateCounterForm() {
         },
     });
 
-    function onSubmit({ title }: z.infer<typeof formSchema>) {
-        $counters.set([
-            {
+    async function onSubmit({ title }: z.infer<typeof formSchema>) {
+        setProcessing(true);
+        try {
+            await db.counters.add({
                 id: nanoid(),
                 title,
                 count: 0,
                 createdAt: dayjs().format(),
-            },
-            ...items,
-        ]);
+            });
 
-        router.push("/");
+            router.push("/");
+        } catch (error) {
+            setProcessing(false);
+
+            console.log(error);
+        }
     }
 
     return (
@@ -73,7 +79,12 @@ export default function CreateCounterForm() {
                         )}
                     />
                     <div className="flex justify-end">
-                        <Button type="submit">Create</Button>
+                        <Button type="submit" disabled={processing}>
+                            {processing && (
+                                <Loader2Icon className="mr-2 size-4 animate-spin" />
+                            )}
+                            Create
+                        </Button>
                     </div>
                 </div>
             </form>

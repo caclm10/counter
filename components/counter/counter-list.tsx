@@ -2,10 +2,10 @@ import type { Counter } from "@/models/counter";
 import CounterListItem from "@/components/counter/counter-list-item";
 
 interface Props {
-    items: Counter[];
+    items?: Counter[];
 }
 
-export default function CounterList({ items }: Props) {
+export default function CounterList({ items = [] }: Props) {
     if (items.length === 0) return null;
 
     return (

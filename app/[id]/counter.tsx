@@ -1,42 +1,51 @@
 "use client";
 
 import dayjs from "dayjs";
-import { useStore } from "@nanostores/react";
+import { useEffect, useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { $counters } from "@/stores/counter-store";
 import type { Counter } from "@/models/counter";
+import { db } from "@/lib/db";
+import { Button } from "@/components/ui/button";
 
 interface Props {
     id: string;
 }
 
 export default function Counter({ id }: Props) {
-    const items = useStore($counters);
+    const counter = useLiveQuery(async () => {
+        const counter = await db.counters.get(id);
 
-    const counters = JSON.parse(JSON.stringify(items)) as Counter[];
-    const counterIndex = items.findIndex((item) => item.id === id);
-    const counter = items[counterIndex];
+        return counter;
+    }, [id]);
 
-    function setCounters() {
-        counters[counterIndex] = counter;
-        $counters.set(counters);
-    }
+    const [count, setCount] = useState(0);
+    const [initialized, setInitialized] = useState(false);
 
     function handleClickIncrement() {
-        counter.count++;
-        setCounters();
+        setCount((count) => count + 1);
     }
 
     function handleClickDecrement() {
-        counter.count--;
-        setCounters();
+        setCount((count) => count - 1);
     }
 
     function handleClickReset() {
-        counter.count = 0;
-        setCounters();
+        setCount(0);
     }
+
+    useEffect(() => {
+        if (initialized) {
+            db.counters.update(id, { count });
+        }
+    }, [count, initialized]);
+
+    useEffect(() => {
+        if (counter && !initialized) {
+            setCount(counter?.count || 0);
+            setInitialized(true);
+        }
+    }, [counter, initialized]);
 
     return (
         <>
@@ -46,7 +55,7 @@ export default function Counter({ id }: Props) {
             </p>
 
             <div className="flex items-center justify-center px-5 py-20">
-                <span className="text-9xl">{counter?.count}</span>
+                <span className="text-9xl">{count || counter?.count}</span>
             </div>
 
             <div className="grid mb-4">
