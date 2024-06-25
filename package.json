@@ -16,6 +16,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
+    "dexie": "^4.0.7",
+    "dexie-react-hooks": "^1.1.7",
     "lucide-react": "^0.396.0",
     "nanoid": "^5.0.7",
     "nanostores": "^0.10.3",
