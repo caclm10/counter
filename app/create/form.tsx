@@ -42,14 +42,15 @@ export default function CreateCounterForm() {
     async function onSubmit({ title }: z.infer<typeof formSchema>) {
         setProcessing(true);
         try {
+            const id = nanoid();
             await db.counters.add({
-                id: nanoid(),
+                id,
                 title,
                 count: 0,
                 createdAt: dayjs().format(),
             });
 
-            router.push("/");
+            router.push(`/${id}`);
         } catch (error) {
             setProcessing(false);
 

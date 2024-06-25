@@ -15,6 +15,7 @@ import {
 import { db } from "@/lib/db";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
     id: string;
@@ -29,6 +30,10 @@ export default function DeleteCounterConfirmation({ id }: Props) {
         setProcessing(true);
         try {
             await db.counters.delete(id);
+
+            toast("Success.", {
+                description: "A counter deleted successfully",
+            });
 
             router.push("/");
         } catch (error) {
