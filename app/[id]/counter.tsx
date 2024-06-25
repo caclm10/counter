@@ -7,6 +7,7 @@ import { MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react";
 import type { Counter } from "@/models/counter";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
+import DeleteCounterConfirmation from "@/app/[id]/delete-confirmation";
 
 interface Props {
     id: string;
@@ -47,12 +48,20 @@ export default function Counter({ id }: Props) {
         }
     }, [counter, initialized]);
 
+    if (!counter) return null;
+
     return (
         <>
-            <h1 className="text-xl font-medium">{counter?.title}</h1>
-            <p className="text-xs italic text-muted-foreground">
-                {dayjs(counter?.createdAt).format("DD MMMM YYYY, HH:mm")}
-            </p>
+            <div className="mb-2">
+                <h1 className="text-xl font-medium">{counter?.title}</h1>
+                <p className="text-xs italic text-muted-foreground">
+                    {dayjs(counter?.createdAt).format("DD MMMM YYYY, HH:mm")}
+                </p>
+            </div>
+
+            <div className="flex justify-end">
+                <DeleteCounterConfirmation id={id} />
+            </div>
 
             <div className="flex items-center justify-center px-5 py-20">
                 <span className="text-9xl">{count || counter?.count}</span>
